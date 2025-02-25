@@ -185,3 +185,20 @@ def merge_df_ydelse(ydelse_df, borger_information_df, afdeling_df, group_by, agg
 
     result = set_string_dates_to_datetime(result)
     return set_values_for_first_row(result)
+
+
+def sager_afdeling_medarbejder_merge_df(sager_df, afdeling_df, medarbejder_df, group_by, agg_dict, columns):
+    sager_df = sager_df.rename(columns={'SagModel': 'Sager_SagModel'})
+    afdeling_df = afdeling_df.rename(columns={'Navn': 'AfdelingNavn', 'AfdelingsId': 'AfdelingId'})
+    medarbejder_df = medarbejder_df.rename(columns={'Fornavn': 'MedarbejderFornavn', 'Efternavn': 'MedarbejderEfternavn'})
+    merged_df = pd.merge(sager_df, afdeling_df[['AfdelingId', 'AfdelingNavn']], on='AfdelingId', how='left')
+
+    merged_df = merged_df.rename(columns={'AfdelingNavn_y': 'AfdelingNavn'})
+    merged_df = pd.merge(merged_df, medarbejder_df[['MedarbejderId', 'MedarbejderFornavn', 'MedarbejderEfternavn', 'AfdelingId']], on='AfdelingId', how='left')
+
+    merged_df = merged_df[merged_df['Status'] == 'Igangværende']
+    result = merged_df.groupby(group_by).agg(agg_dict).reset_index(drop=True)
+    result.columns = columns
+    result = set_string_dates_to_datetime(result)
+    result = set_values_for_first_row(result)
+    return result
