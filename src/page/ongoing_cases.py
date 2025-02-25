@@ -2,12 +2,9 @@ import streamlit as st
 import streamlit_antd_components as sac
 import pandas as pd
 import altair as alt
-import logging
 from sensum.sensum import create_merge_lambda, process_sensum
 from utils.api_requests import APIClient
 from utils.config import CONFIG_LIBRARY_USER, CONFIG_LIBRARY_PASS, CONFIG_LIBRARY_URL
-
-logger = logging.getLogger(__name__)
 
 config_library_client = APIClient(base_url=CONFIG_LIBRARY_URL, username=CONFIG_LIBRARY_USER, password=CONFIG_LIBRARY_PASS)
 
@@ -46,7 +43,6 @@ def get_ongoing_cases():
         try:
             if 'cases_final_result' not in st.session_state:
                 if sensum_jobs_config is None:
-                    logging.error(f"Failed to load config file from path: {config_path}")
                     st.error("Failed to load configuration.")
                     return
 
@@ -96,5 +92,4 @@ def get_ongoing_cases():
 
             st.altair_chart(chart, use_container_width=True)
         except Exception as e:
-            logger.error(f'An error occurred: {e}')
             st.error(f'An error occurred: {e}')
