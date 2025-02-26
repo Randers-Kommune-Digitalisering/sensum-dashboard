@@ -2,33 +2,9 @@ import streamlit as st
 import streamlit_antd_components as sac
 import pandas as pd
 import altair as alt
-from sensum.sensum import create_merge_lambda, process_sensum
-from utils.api_requests import APIClient
-from utils.config import CONFIG_LIBRARY_USER, CONFIG_LIBRARY_PASS, CONFIG_LIBRARY_URL
+from utils.database_connection import get_db_client
 
-config_library_client = APIClient(base_url=CONFIG_LIBRARY_URL, username=CONFIG_LIBRARY_USER, password=CONFIG_LIBRARY_PASS)
-
-sensum_jobs_config = [
-    {
-        "name": "SA_Tester.csv",
-        "patterns": ["Sager_*.csv", "Afdeling_*.csv", "Medarbejder_*.csv"],
-        "group_by": "SagId",
-        "directories": ["sensum_randers"],
-        "agg_columns": {
-            "SagNavn": "first",
-            "SagType": "first",
-            "MedarbejderFornavn": "first",
-            "MedarbejderEfternavn": "first",
-            "AfdelingNavn": "first",
-            "Status": "first"
-        },
-        "columns": [
-            "SagNavn", "SagType",
-            "MedarbejderFornavn", "MedarbejderEfternavn", "AfdelingNavn", "Status"
-        ],
-        "merge_func": "sager_afdeling_medarbejder_merge_df"
-    }
-]
+db_client = get_db_client()
 
 
 def get_ongoing_cases():
@@ -42,29 +18,21 @@ def get_ongoing_cases():
     if content_tabs == 'Antal igangværende sager':
         try:
             if 'cases_final_result' not in st.session_state:
-                if sensum_jobs_config is None:
-                    st.error("Failed to load configuration.")
-                    return
-
                 results = []
                 with st.spinner('Loading data...'):
-                    for config in sensum_jobs_config:
-                        merge_lambda = create_merge_lambda(config)
-
-                        result = process_sensum(
-                            config['patterns'],
-                            config['directories'],
-                            merge_lambda,
-                            config['name']
-                        )
-                        if result is not None:
-                            results.append(result)
-                        else:
-                            st.error(f"Failed to process data for {config['name']}")
-                            return
+                    query = """
+                    SELECT SagNavn, SagType, MedarbejderFornavn, MedarbejderEfternavn, AfdelingNavn, Status
+                    FROM SA_Tester
+                    """
+                    result = db_client.execute_sql(query)
+                    if result is not None:
+                        results.append(pd.DataFrame(result, columns=['SagNavn', 'SagType', 'MedarbejderFornavn', 'MedarbejderEfternavn', 'AfdelingNavn', 'Status']))
+                    else:
+                        st.error("Failed to fetch data from the database.")
+                        return
 
                 if results:
-                    st.success("Data processed successfully.")
+                    st.success("Data fetched successfully.")
                     st.session_state.cases_final_result = pd.concat(results, ignore_index=True)
                 else:
                     st.error("No data to display.")
