@@ -17,7 +17,7 @@ class DatabaseClient:
 
     def get_connection(self):
         try:
-            if not self.connection:
+            if not self.connection or not self.connection.open:
                 self.logger.info(f"Attempting to connect to {self.db_type} database: {self.database} at {self.host}")
                 if self.db_type == 'mssql':
                     self.connection = pymssql.connect(host=self.host, user=self.username, password=self.password, database=self.database)
@@ -33,7 +33,7 @@ class DatabaseClient:
 
     def get_cursor(self):
         try:
-            if not self.cursor:
+            if not self.cursor or not self.connection.open:
                 self.cursor = self.get_connection().cursor()
             return self.cursor
         except Exception as e:
