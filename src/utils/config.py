@@ -11,7 +11,8 @@ PORT = os.getenv('PORT', '8080')
 POD_NAME = os.getenv('POD_NAME', 'pod_name_not_set')
 
 # Sensum Database
-SENSUM_DB_USER = os.environ['SENSUM_DB_USER'].rstrip()
-SENSUM_DB_PASS = os.environ['SENSUM_DB_PASS'].rstrip()
-SENSUM_DB_HOST = os.environ['SENSUM_DB_HOST'].rstrip()
-SENSUM_DB_DATABASE = os.environ['SENSUM_DB_DATABASE'].rstrip()
+SENSUM_DB_USER = os.environ['SENSUM_DB_USER']
+SENSUM_DB_PASS = os.environ['SENSUM_DB_PASS']
+SENSUM_DB_HOST = os.environ['SENSUM_DB_HOST']
+SENSUM_DB_DATABASE = os.environ['SENSUM_DB_DATABASE']
+SENSUM_DB_PORT = os.environ['SENSUM_DB_PORT']

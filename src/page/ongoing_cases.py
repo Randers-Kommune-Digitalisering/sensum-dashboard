@@ -21,8 +21,8 @@ def get_ongoing_cases():
                 results = []
                 with st.spinner('Loading data...'):
                     query = """
-                    SELECT SagNavn, SagType, MedarbejderFornavn, MedarbejderEfternavn, AfdelingNavn, Status
-                    FROM Aktive_Sager
+                    SELECT "SagNavn", "SagType", "MedarbejderFornavn", "MedarbejderEfternavn", "AfdelingNavn", "Status"
+                    FROM "Aktive_Sager"
                     """
                     result = db_client.execute_sql(query)
                     if result is not None:
@@ -61,3 +61,5 @@ def get_ongoing_cases():
             st.altair_chart(chart, use_container_width=True)
         except Exception as e:
             st.error(f'An error occurred: {e}')
+        finally:
+            db_client.close_connection()
