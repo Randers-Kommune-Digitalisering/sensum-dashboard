@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from utils.logo import get_logo
 from page.ongoing_cases import get_ongoing_cases
+from page.indsatser import get_indsatser
 
 st.set_page_config(page_title="Sensum Dashboard", page_icon="assets/favicon.ico")
 
@@ -11,8 +12,8 @@ with st.sidebar:
         "Sensum Dashboard",
         ["Antal igangværende sager", "Indsatser", "Ydelse fordelt på afdeling"],
         default_index=0,
-        icons=['list-task', 'activity', 'bar-chart'],
-        menu_icon="cast",
+        icons=['map', 'bi-bar-chart', 'bi-bar-chart'],
+        menu_icon="bi-clipboard-data-fill",
         styles={
             "container": {"padding": "5px", "background-color": "#f0f0f0"},
             "icon": {"color": "#4a4a4a", "font-size": "18px"},
@@ -25,6 +26,6 @@ with st.sidebar:
 if selected == "Antal igangværende sager":
     get_ongoing_cases()
 elif selected == "Indsatser":
-    st.write("Indsatser")
+    get_indsatser()
 elif selected == "Ydelse fordelt på afdeling":
     st.write("Ydelse fordelt på afdeling")
