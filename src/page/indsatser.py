@@ -48,8 +48,8 @@ def get_indsatser():
         final_result = st.session_state.indsatser_final_result
 
         filtered_result = final_result[
-            (final_result['IndsatsStatus'] == 'Godkendt') &
-            (final_result['IndsatsStartDato'] >= '2024-01-01')
+            (final_result['IndsatsStatus'] == 'Godkendt')
+            & (final_result['IndsatsStartDato'] >= '2024-01-01')
         ]
 
         filtered_result['IndsatsStartDato'] = pd.to_datetime(filtered_result['IndsatsStartDato'])
