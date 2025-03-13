@@ -41,9 +41,24 @@ def get_ongoing_cases():
             final_result = st.session_state.cases_final_result
 
             sagstype_options = final_result['SagType'].unique()
-            selected_sagstype = st.selectbox('Filter by Sagstype', sagstype_options)
+            selected_sagstype = st.selectbox('Vælg Sagstype', sagstype_options)
 
             filtered_result = final_result[final_result['SagType'] == selected_sagstype]
+
+            afdeling_options = filtered_result.dropna(subset=['MedarbejderFornavn', 'MedarbejderEfternavn'])['AfdelingNavn'].unique()
+            selected_afdeling = st.selectbox('Vælg Afdeling', afdeling_options)
+
+            filtered_result = filtered_result[filtered_result['AfdelingNavn'] == selected_afdeling]
+
+            filtered_result['MedarbejderNavn'] = filtered_result['MedarbejderFornavn'] + " " + filtered_result['MedarbejderEfternavn']
+            medarbejder_options = filtered_result['MedarbejderNavn'].dropna().unique()
+
+            if len(medarbejder_options) > 0:
+                selected_medarbejder = st.selectbox('Vælg Medarbejder', medarbejder_options)
+                filtered_result = filtered_result[filtered_result['MedarbejderNavn'] == selected_medarbejder]
+
+            num_ongoing_cases = len(filtered_result)
+            st.metric(label="Antal igangværende sager", value=num_ongoing_cases)
 
             chart_data = filtered_result.groupby(['AfdelingNavn', 'MedarbejderFornavn', 'MedarbejderEfternavn']).size().reset_index(name='Antal igangværende sager')
 
