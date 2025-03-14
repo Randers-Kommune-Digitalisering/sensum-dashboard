@@ -30,10 +30,10 @@ def get_indsatser():
         if 'indsatser_final_result' not in st.session_state:
             results = []
             with st.spinner('Loading data...'):
-                query = 'SELECT "IndsatsStartDato", "IndsatsStatus" FROM "Aktive_Indsatser"'
+                query = 'SELECT "IndsatsStartDato", "IndsatsStatus", "IndsatsSlutDato" FROM "Aktive_Indsatser"'
                 result = db_client.execute_sql(query)
                 if result is not None:
-                    results.append(pd.DataFrame(result, columns=['IndsatsStartDato', 'IndsatsStatus']))
+                    results.append(pd.DataFrame(result, columns=['IndsatsStartDato', 'IndsatsStatus', 'IndsatsSlutDato']))
                 else:
                     st.error("Failed to fetch data from the database.")
                     return
@@ -47,17 +47,20 @@ def get_indsatser():
 
         final_result = st.session_state.indsatser_final_result
 
+        final_result['IndsatsStartDato'] = pd.to_datetime(final_result['IndsatsStartDato'], dayfirst=True)
+        final_result['IndsatsSlutDato'] = pd.to_datetime(final_result['IndsatsSlutDato'], dayfirst=True, errors='coerce')
+
         filtered_result = final_result[
-            (final_result['IndsatsStatus'] == 'Godkendt')
-            & (final_result['IndsatsStartDato'] >= '2024-01-01')
+            (final_result['IndsatsStatus'] == 'Godkendt') &
+            ((final_result['IndsatsSlutDato'].isna()) | (final_result['IndsatsSlutDato'] >= pd.Timestamp.now()))
         ]
 
-        filtered_result['IndsatsStartDato'] = pd.to_datetime(filtered_result['IndsatsStartDato'])
+        total_active_indsatser = filtered_result.shape[0]
+        st.metric(label="Samlet antal aktive indsatser (Alle)", value=total_active_indsatser)
 
         filtered_result['Year'] = filtered_result['IndsatsStartDato'].dt.year
 
         unique_years = filtered_result['Year'].unique()
-        unique_years = unique_years[unique_years >= 2024]
 
         if content_tabs == 'Uge':
             filtered_result['Week'] = filtered_result['IndsatsStartDato'].dt.isocalendar().week
