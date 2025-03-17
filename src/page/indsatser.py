@@ -60,7 +60,7 @@ def get_indsatser():
 
         filtered_result['Year'] = filtered_result['IndsatsStartDato'].dt.year
 
-        unique_years = filtered_result['Year'].unique()
+        unique_years = sorted(filtered_result['Year'].unique(), reverse=True)
 
         if content_tabs == 'Uge':
             filtered_result['Week'] = filtered_result['IndsatsStartDato'].dt.isocalendar().week
