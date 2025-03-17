@@ -30,7 +30,10 @@ def get_indsatser():
         if 'indsatser_final_result' not in st.session_state:
             results = []
             with st.spinner('Loading data...'):
-                query = 'SELECT "IndsatsStartDato", "IndsatsStatus", "IndsatsSlutDato" FROM "Aktive_Indsatser"'
+                query = """
+                SELECT "IndsatsStartDato", "IndsatsStatus", "IndsatsSlutDato"
+                FROM "Aktive_Indsatser"
+                """
                 result = db_client.execute_sql(query)
                 if result is not None:
                     results.append(pd.DataFrame(result, columns=['IndsatsStartDato', 'IndsatsStatus', 'IndsatsSlutDato']))
