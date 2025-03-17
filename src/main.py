@@ -3,6 +3,7 @@ from streamlit_option_menu import option_menu
 from utils.logo import get_logo
 from page.ongoing_cases import get_ongoing_cases
 from page.indsatser import get_indsatser
+from page.indsats_supplier import get_indsatser_with_supplier
 
 st.set_page_config(page_title="Sensum Dashboard", page_icon="assets/favicon.ico")
 
@@ -10,9 +11,9 @@ with st.sidebar:
     st.sidebar.markdown(get_logo(), unsafe_allow_html=True)
     selected = option_menu(
         "Sensum Dashboard",
-        ["Antal igangværende sager", "Indsatser", "Ydelse fordelt på afdeling"],
+        ["Antal igangværende sager", "Indsatser", "Ydelse fordelt på afdeling,", "Indsatser fordelt på Afdeling, Leverandørnavn og LeverandørIndsats"],
         default_index=0,
-        icons=['map', 'bi-bar-chart', 'bi-bar-chart'],
+        icons=['map', 'bi-bar-chart', 'bi-bar-chart', 'bi-bar-chart'],
         menu_icon="bi-clipboard-data-fill",
         styles={
             "container": {"padding": "5px", "background-color": "#f0f0f0"},
@@ -29,3 +30,5 @@ elif selected == "Indsatser":
     get_indsatser()
 elif selected == "Ydelse fordelt på afdeling":
     st.write("Ydelse fordelt på afdeling")
+elif selected == "Indsatser fordelt på Afdeling, Leverandørnavn og LeverandørIndsats":
+    get_indsatser_with_supplier()
