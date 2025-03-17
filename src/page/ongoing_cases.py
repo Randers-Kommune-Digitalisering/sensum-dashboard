@@ -41,12 +41,12 @@ def get_ongoing_cases():
             final_result = st.session_state.cases_final_result
 
             sagstype_options = final_result['SagType'].unique()
-            selected_sagstype = st.selectbox('Vælg Sagstype', sagstype_options)
+            selected_sagstype = st.selectbox('Vælg Sagstype', sagstype_options, help="Vælg den type sag, du vil se data for.")
 
             filtered_result = final_result[final_result['SagType'] == selected_sagstype]
 
             afdeling_options = filtered_result.dropna(subset=['MedarbejderFornavn', 'MedarbejderEfternavn'])['AfdelingNavn'].unique()
-            selected_afdeling = st.selectbox('Vælg Afdeling', afdeling_options)
+            selected_afdeling = st.selectbox('Vælg Afdeling', afdeling_options, help="Vælg den afdeling, du vil se data for.")
 
             filtered_result = filtered_result[filtered_result['AfdelingNavn'] == selected_afdeling]
 
@@ -54,7 +54,7 @@ def get_ongoing_cases():
             medarbejder_options = filtered_result['MedarbejderNavn'].dropna().unique()
 
             if len(medarbejder_options) > 0:
-                selected_medarbejder = st.selectbox('Vælg Medarbejder', medarbejder_options)
+                selected_medarbejder = st.selectbox('Vælg Medarbejder', medarbejder_options, help="Vælg den medarbejder, du vil se data for.")
                 filtered_result = filtered_result[filtered_result['MedarbejderNavn'] == selected_medarbejder]
 
             num_ongoing_cases = len(filtered_result)

@@ -50,7 +50,7 @@ def get_indsatser_with_supplier():
         ]
 
         if content_tabs == 'Afdeling':
-            afdeling_filter = st.selectbox('Vælg Afdeling', options=filtered_result['AfdelingNavn'].unique())
+            afdeling_filter = st.selectbox('Vælg Afdeling', options=filtered_result['AfdelingNavn'].unique(), help="Vælg den afdeling, du vil se data for.")
             afdeling_data = filtered_result[filtered_result['AfdelingNavn'] == afdeling_filter].groupby('AfdelingNavn').size().reset_index(name='Antal aktive indsatser')
             st.metric(label=f"Antal aktive indsatser for {afdeling_filter}", value=afdeling_data['Antal aktive indsatser'].sum())
 
@@ -67,7 +67,7 @@ def get_indsatser_with_supplier():
             st.altair_chart(afdeling_chart, use_container_width=True)
 
         elif content_tabs == 'Leverandørnavn':
-            leverandørnavn_filter = st.selectbox('Vælg Leverandørnavn', options=filtered_result['LeverandørNavn'].unique())
+            leverandørnavn_filter = st.selectbox('Vælg Leverandørnavn', options=filtered_result['LeverandørNavn'].unique(), help="Vælg den leverandør, du vil se data for.")
             leverandørnavn_data = filtered_result[filtered_result['LeverandørNavn'] == leverandørnavn_filter].groupby('LeverandørNavn').size().reset_index(name='Antal aktive indsatser')
 
             st.metric(label=f"Antal aktive indsatser for {leverandørnavn_filter}", value=leverandørnavn_data['Antal aktive indsatser'].sum())
@@ -85,7 +85,7 @@ def get_indsatser_with_supplier():
             st.altair_chart(leverandørnavn_chart, use_container_width=True)
 
         elif content_tabs == 'LeverandørIndsats':
-            leverandørindsats_filter = st.selectbox('Vælg LeverandørIndsats', options=filtered_result['LeverandørIndsats'].unique())
+            leverandørindsats_filter = st.selectbox('Vælg LeverandørIndsats', options=filtered_result['LeverandørIndsats'].unique(), help="Vælg den leverandørindsats, du vil se data for.")
             leverandørindsats_data = filtered_result[filtered_result['LeverandørIndsats'] == leverandørindsats_filter].groupby('LeverandørIndsats').size().reset_index(name='Antal aktive indsatser')
 
             st.metric(label=f"Antal aktive indsatser for {leverandørindsats_filter}", value=leverandørindsats_data['Antal aktive indsatser'].sum())

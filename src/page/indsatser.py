@@ -76,12 +76,13 @@ def get_indsatser():
                     unique_years,
                     format_func=lambda x: f'{x}',
                     index=unique_years.tolist().index(st.session_state['selected_year_week']) if 'selected_year_week' in st.session_state and st.session_state['selected_year_week'] is not None else 0,
-                    key='year_select_week'
+                    key='year_select_week',
+                    help="Vælg det år, for hvilket du vil se dataene."
                 )
             with col2:
                 filtered_result_year = filtered_result[filtered_result['Year'] == selected_year_week]
                 unique_weeks = filtered_result_year['Week'].sort_values().unique()
-                selected_week = st.selectbox('Vælg en uge', unique_weeks)
+                selected_week = st.selectbox('Vælg en uge', unique_weeks, help="Vælg den uge, for hvilken du vil se dataene.")
 
             week_data = filtered_result_year[filtered_result_year['Week'] == selected_week].groupby(['Week', 'Weekday']).size().reset_index(name='Antal aktive indsatser')
 
@@ -111,12 +112,13 @@ def get_indsatser():
                     unique_years,
                     format_func=lambda x: f'{x}',
                     index=unique_years.tolist().index(st.session_state['selected_year_month']) if 'selected_year_month' in st.session_state and st.session_state['selected_year_month'] is not None else 0,
-                    key='year_select_month'
+                    key='year_select_month',
+                    help="Vælg det år, for hvilket du vil se dataene."
                 )
             with col2:
                 filtered_result_year = filtered_result[filtered_result['Year'] == selected_year_month]
                 unique_months = filtered_result_year['Month'].sort_values().unique()
-                selected_month = st.selectbox('Vælg en måned', unique_months)
+                selected_month = st.selectbox('Vælg en måned', unique_months, help="Vælg den måned, for hvilken du vil se dataene.")
 
             month_data = filtered_result_year[filtered_result_year['Month'] == selected_month].groupby(['Month', 'Månedsdag']).size().reset_index(name='Antal aktive indsatser')
 
