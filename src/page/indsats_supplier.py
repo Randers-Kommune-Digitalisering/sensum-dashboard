@@ -22,12 +22,12 @@ def get_indsatser_with_supplier():
             results = []
             with st.spinner('Loading data...'):
                 query = '''
-                SELECT "IndsatsStatus", "Indsats", "AfdelingNavn", "IndsatsStartDato", "IndsatsSlutDato", "LeverandørIndsats", "LeverandørNavn"
+                SELECT "IndsatsStatus", "Indsats", "AfdelingNavn", "IndsatsStartDato", "IndsatsSlutDato", "LeverandørIndsats", "LeverandørNavn", "IndsatsParagraf"
                 FROM "Indsats_Fordeling"
                 '''
                 result = db_client.execute_sql(query)
                 if result is not None:
-                    results.append(pd.DataFrame(result, columns=['IndsatsStatus', 'Indsats', 'AfdelingNavn', 'IndsatsStartDato', 'IndsatsSlutDato', 'LeverandørIndsats', 'LeverandørNavn']))
+                    results.append(pd.DataFrame(result, columns=['IndsatsStatus', 'Indsats', 'AfdelingNavn', 'IndsatsStartDato', 'IndsatsSlutDato', 'LeverandørIndsats', 'LeverandørNavn', 'IndsatsParagraf']))
                 else:
                     st.error("Failed to fetch data from the database.")
                     return
@@ -56,8 +56,8 @@ def get_indsatser_with_supplier():
 
             st.write("## Antal af Aktive Indsatser pr. Afdeling")
             afdeling_chart = alt.Chart(filtered_result.groupby('AfdelingNavn').size().reset_index(name='Antal aktive indsatser')).mark_bar().encode(
-                x=alt.X('AfdelingNavn', title='Afdeling'),
-                y=alt.Y('Antal aktive indsatser', title='Antal aktive indsatser'),
+                x=alt.X('Antal aktive indsatser', title='Antal aktive indsatser'),
+                y=alt.Y('AfdelingNavn', title='Afdeling'),
                 tooltip=[alt.Tooltip('AfdelingNavn', title='Afdeling'), 'Antal aktive indsatser']
             ).properties(
                 width=600,
@@ -68,15 +68,15 @@ def get_indsatser_with_supplier():
 
         elif content_tabs == 'Leverandørnavn':
             leverandørnavn_filter = st.selectbox('Vælg Leverandørnavn', options=filtered_result['LeverandørNavn'].unique(), help="Vælg den leverandør, du vil se data for.")
-            leverandørnavn_data = filtered_result[filtered_result['LeverandørNavn'] == leverandørnavn_filter].groupby('LeverandørNavn').size().reset_index(name='Antal aktive indsatser')
+            leverandørnavn_data = filtered_result[filtered_result['LeverandørNavn'] == leverandørnavn_filter].groupby(['LeverandørNavn', 'IndsatsParagraf']).size().reset_index(name='Antal aktive indsatser')
 
             st.metric(label=f"Antal aktive indsatser for {leverandørnavn_filter}", value=leverandørnavn_data['Antal aktive indsatser'].sum())
 
-            st.write("## Antal af Aktive Indsatser pr. Leverandørnavn")
-            leverandørnavn_chart = alt.Chart(filtered_result.groupby('LeverandørNavn').size().reset_index(name='Antal aktive indsatser')).mark_bar().encode(
-                x=alt.X('LeverandørNavn', title='Leverandørnavn'),
-                y=alt.Y('Antal aktive indsatser', title='Antal aktive indsatser'),
-                tooltip=[alt.Tooltip('LeverandørNavn', title='Leverandørnavn'), 'Antal aktive indsatser']
+            st.write(f"## Antal af Aktive Indsatser pr. Paragraf for {leverandørnavn_filter}")
+            leverandørnavn_chart = alt.Chart(leverandørnavn_data).mark_bar().encode(
+                x=alt.X('Antal aktive indsatser', title='Antal aktive indsatser'),
+                y=alt.Y('IndsatsParagraf', title='IndsatsParagraf'),
+                tooltip=['IndsatsParagraf', 'Antal aktive indsatser']
             ).properties(
                 width=600,
                 height=400
@@ -85,6 +85,7 @@ def get_indsatser_with_supplier():
             st.altair_chart(leverandørnavn_chart, use_container_width=True)
 
         elif content_tabs == 'LeverandørIndsats':
+            filtered_result = filtered_result[filtered_result['LeverandørIndsats'] != 'Auto-oprettet']
             leverandørindsats_filter = st.selectbox('Vælg LeverandørIndsats', options=filtered_result['LeverandørIndsats'].unique(), help="Vælg den leverandørindsats, du vil se data for.")
             leverandørindsats_data = filtered_result[filtered_result['LeverandørIndsats'] == leverandørindsats_filter].groupby('LeverandørIndsats').size().reset_index(name='Antal aktive indsatser')
 
@@ -92,8 +93,8 @@ def get_indsatser_with_supplier():
 
             st.write("## Antal af Aktive Indsatser pr. LeverandørIndsats")
             leverandørindsats_chart = alt.Chart(filtered_result.groupby('LeverandørIndsats').size().reset_index(name='Antal aktive indsatser')).mark_bar().encode(
-                x=alt.X('LeverandørIndsats', title='LeverandørIndsats'),
-                y=alt.Y('Antal aktive indsatser', title='Antal aktive indsatser'),
+                x=alt.X('Antal aktive indsatser', title='Antal aktive indsatser'),
+                y=alt.Y('LeverandørIndsats', title='LeverandørIndsats'),
                 tooltip=[alt.Tooltip('LeverandørIndsats', title='LeverandørIndsats'), 'Antal aktive indsatser']
             ).properties(
                 width=600,
