@@ -85,3 +85,5 @@ def get_ydelse():
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
+    finally:
+        db_client.close_connection()
