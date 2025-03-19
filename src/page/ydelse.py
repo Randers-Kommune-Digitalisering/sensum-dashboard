@@ -46,8 +46,7 @@ def get_ydelse():
         final_result['Year'] = final_result['StartDato'].dt.year
         final_result['Month'] = final_result['StartDato'].dt.month
 
-        unique_years = final_result['Year'].unique()
-        unique_years = unique_years[unique_years >= 2024]
+        unique_years = sorted(final_result['Year'].unique(), reverse=True)
 
         if content_tabs == 'Periode':
             col1, col2 = st.columns(2)
