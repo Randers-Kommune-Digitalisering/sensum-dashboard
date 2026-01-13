@@ -22,7 +22,7 @@ def get_ongoing_cases():
                 with st.spinner('Loading data...'):
                     query = """
                     SELECT "SagNavn", "SagType", "MedarbejderFornavn", "MedarbejderEfternavn", "AfdelingNavn", "Status"
-                    FROM "Aktive_Sager"
+                    FROM aktive_sager
                     """
                     result = db_client.execute_sql(query)
                     if result is not None:

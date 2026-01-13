@@ -32,7 +32,7 @@ def get_indsatser():
             with st.spinner('Loading data...'):
                 query = """
                 SELECT "IndsatsStartDato", "IndsatsStatus", "IndsatsSlutDato"
-                FROM "Aktive_Indsatser"
+                FROM aktive_indsatser
                 """
                 result = db_client.execute_sql(query)
                 if result is not None:

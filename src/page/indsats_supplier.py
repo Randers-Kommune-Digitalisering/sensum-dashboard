@@ -23,7 +23,7 @@ def get_indsatser_with_supplier():
             with st.spinner('Loading data...'):
                 query = '''
                 SELECT "IndsatsStatus", "Indsats", "AfdelingNavn", "IndsatsStartDato", "IndsatsSlutDato", "LeverandørIndsats", "LeverandørNavn", "IndsatsParagraf"
-                FROM "Indsats_Fordeling"
+                FROM indsats_fordeling
                 '''
                 result = db_client.execute_sql(query)
                 if result is not None:

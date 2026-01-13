@@ -21,7 +21,7 @@ def get_ydelse():
             with st.spinner('Loading data...'):
                 query = """
                 SELECT "YdelseNavn", "AfdelingNavn", "StartDato", "SlutDato"
-                FROM "Ydelse"
+                FROM ydelse
                 """
                 result = db_client.execute_sql(query)
                 if result is not None:
