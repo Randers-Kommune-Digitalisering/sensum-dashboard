@@ -268,7 +268,7 @@ def get_ydelse():
 
         st.altair_chart(
             month_chart,
-            width=True,
+            use_container_width=True,
         )
 
     except Exception as error:

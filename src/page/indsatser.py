@@ -447,7 +447,7 @@ def show_week_view(
 
     st.altair_chart(
         week_chart,
-        width=True,
+        use_container_width=True,
     )
 
 
@@ -573,5 +573,5 @@ def show_month_view(
 
     st.altair_chart(
         month_chart,
-        width=True,
+        use_container_width=True,
     )

@@ -321,7 +321,7 @@ def get_indsatser_with_supplier():
 
             st.altair_chart(
                 afdeling_chart,
-                width=True,
+                use_container_width=True,
             )
 
         elif content_tabs == "Leverandørnavn":
@@ -392,7 +392,7 @@ def get_indsatser_with_supplier():
 
             st.altair_chart(
                 leverandørnavn_chart,
-                width=True,
+                use_container_width=True,
             )
 
         elif content_tabs == "LeverandørIndsats":
@@ -476,7 +476,7 @@ def get_indsatser_with_supplier():
 
             st.altair_chart(
                 leverandørindsats_chart,
-                width=True,
+                use_container_width=True,
             )
 
     except Exception as error:

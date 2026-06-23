@@ -272,7 +272,7 @@ def get_ongoing_cases():
 
         st.altair_chart(
             chart,
-            width="stretch",
+            use_container_width=True,
         )
 
     except Exception as error:
