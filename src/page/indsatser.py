@@ -186,7 +186,7 @@ def render_period_tabs() -> str:
                 st.button(
                     "Uge",
                     key="period_week_button",
-                    width=True,
+                    use_container_width=True,
                     on_click=select_period,
                     args=("Uge",),
                 )
@@ -196,7 +196,7 @@ def render_period_tabs() -> str:
                 st.button(
                     "Måned",
                     key="period_month_button",
-                    width=True,
+                    use_container_width=True,
                     on_click=select_period,
                     args=("Måned",),
                 )
