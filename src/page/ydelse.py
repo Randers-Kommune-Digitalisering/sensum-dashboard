@@ -67,6 +67,7 @@ def render_period_header() -> None:
         unsafe_allow_html=True,
     )
 
+
 def load_ydelse_data():
     """Load ydelse data and close the database connection safely."""
 

@@ -203,6 +203,7 @@ def render_period_tabs() -> str:
 
     return st.session_state.indsatser_period_tab
 
+
 def load_indsatser_data():
     """Load the indsats data and close the database connection safely."""
 
@@ -574,4 +575,3 @@ def show_month_view(
         month_chart,
         width=True,
     )
-    
