@@ -262,7 +262,6 @@ def get_ongoing_cases():
                 ],
             )
             .properties(
-                width=600,
                 height=400,
                 title=(
                     "Fordeling af igangværende sager "
@@ -273,7 +272,7 @@ def get_ongoing_cases():
 
         st.altair_chart(
             chart,
-            width=True,
+            width="stretch",
         )
 
     except Exception as error:

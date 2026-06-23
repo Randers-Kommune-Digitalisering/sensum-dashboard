@@ -484,3 +484,4 @@ def get_indsatser_with_supplier():
 
     finally:
         db_client.close_connection()
+        
